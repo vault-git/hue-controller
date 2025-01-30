@@ -55,54 +55,6 @@ func createNewConfig(config *hc.BridgeConfig) {
 	config.ApiKey = apiKey
 }
 
-func setNewLightProps(currentProps hc.LightProps, newProps *hc.LightProps) {
-	if newProps.Brightness == -1.0 {
-		newProps.Brightness = currentProps.Brightness
-	}
-
-	if newProps.Brightness >= 5.0 {
-		newProps.On = true
-	}
-
-	if newProps.ColorX == -1.0 {
-		newProps.ColorX = currentProps.ColorX
-	}
-
-	if newProps.ColorY == -1.0 {
-		newProps.ColorY = currentProps.ColorY
-	}
-}
-
-func printAllLights(config hc.BridgeConfig) {
-	lights := hc.ParseDeviceResource(hc.GetDeviceResource(config))
-
-	for _, rid := range lights {
-		light := hc.ParseLightResource(hc.GetLightResource(config, rid))
-
-		fmt.Printf("%s: %s", light.Name, light.String())
-	}
-}
-
-func controlLights(config hc.BridgeConfig, lightName string, newLightProps hc.LightProps) {
-	lights := hc.ParseDeviceResource(hc.GetDeviceResource(config))
-
-	for _, rid := range lights {
-		light := hc.ParseLightResource(hc.GetLightResource(config, rid))
-
-		if light.Name == lightName {
-			currentLightProps := hc.ParseLightResource(hc.GetLightResource(config, rid))
-
-			setNewLightProps(currentLightProps, &newLightProps)
-
-			hc.PutLightResource(config, rid, newLightProps)
-
-			return
-		}
-	}
-
-	log.Fatalf("light name \"%v\" not registered", lightName)
-}
-
 func main() {
 	listLights := flag.Bool("list", false, "Lists all registered lights.")
 	createConfig := flag.Bool("register", false, "Creates a config and registers a new HUE api key.")
@@ -125,7 +77,10 @@ func main() {
 	config.Load()
 
 	if *listLights {
-		printAllLights(config)
+		for _, light := range hc.GetAllLights(config) {
+			fmt.Printf("%s: %s", light.Name, light.String())
+		}
+
 		return
 	}
 
@@ -134,8 +89,8 @@ func main() {
 		return
 	}
 
-	controlLights(config, *lightName, hc.LightProps{
-		On:         false,
+	hc.SetLight(config, hc.LightProps{
+		Name:       *lightName,
 		Brightness: *brightness,
 		ColorX:     *colorX,
 		ColorY:     *colorY,

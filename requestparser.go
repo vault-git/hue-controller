@@ -12,6 +12,7 @@ type LightProps struct {
 	Brightness float64
 	ColorX     float64
 	ColorY     float64
+	ColorRgb   string
 }
 
 func (lp *LightProps) String() string {
@@ -23,7 +24,7 @@ func (lp *LightProps) String() string {
 		return "Off"
 	}()
 
-	return fmt.Sprintf("Id: %s, State: %s, Brightness: %0.1f, ColorCoords: %0.4f, %0.4f\n", lp.Id, state, lp.Brightness, lp.ColorX, lp.ColorY)
+	return fmt.Sprintf("\tId: %s,\n\tState: %s,\n\tBrightness: %0.1f,\n\tColor: %s\n", lp.Id, state, lp.Brightness, lp.ColorRgb)
 }
 
 func ParseLightResource(buf []byte) LightProps {
@@ -71,13 +72,16 @@ func ParseLightResource(buf []byte) LightProps {
 
 	lightData := res.Data[0]
 
+	rgbColor := hueColorToRgb(lightData.Color.Xy.X, lightData.Color.Xy.Y, lightData.Dimming.Brightness)
+
 	return LightProps{
-		lightData.Id,
-		lightData.MetaData.Name,
-		lightData.On.On,
-		lightData.Dimming.Brightness,
-		lightData.Color.Xy.X,
-		lightData.Color.Xy.Y,
+		Id:         lightData.Id,
+		Name:       lightData.MetaData.Name,
+		On:         lightData.On.On,
+		Brightness: lightData.Dimming.Brightness,
+		ColorX:     lightData.Color.Xy.X,
+		ColorY:     lightData.Color.Xy.Y,
+		ColorRgb:   rgbColor,
 	}
 }
 

@@ -29,15 +29,15 @@ func TestParseLightResource(t *testing.T) {
 	}{
 		// color lamp
 		{[]byte(`{"errors":[],"data":[{"id":"8535734d-7136-45e6-a551-70b5f2782fa8","id_v1":"/lights/3","owner":{"rid":"49e3d193-c4c6-4525-8bc9-456511567bf5","rtype":"device"},"metadata":{"name":"hue_color_1","archetype":"table_shade","function":"mixed"},"product_data":{"function":"mixed"},"identify":{},"on":{"on":true},"dimming":{"brightness":50.2,"min_dim_level":0.20000000298023225},"dimming_delta":{},"color_temperature":{"mirek":497,"mirek_valid":true,"mirek_schema":{"mirek_minimum":153,"mirek_maximum":500}},"color_temperature_delta":{},"color":{"xy":{"x":0.5249,"y":0.4136},"gamut":{"red":{"x":0.6915,"y":0.3083},"green":{"x":0.17,"y":0.7},"blue":{"x":0.1532,"y":0.0475}},"gamut_type":"C"},"dynamics":{"status":"none","status_values":["none","dynamic_palette"],"speed":0.0,"speed_valid":false},"alert":{"action_values":["breathe"]},"signaling":{"signal_values":["no_signal","on_off","on_off_color","alternating"]},"mode":"normal","effects":{"status_values":["no_effect","candle","fire","prism"],"status":"no_effect","effect_values":["no_effect","candle","fire","prism"]},"powerup":{"preset":"safety","configured":true,"on":{"mode":"on","on":{"on":true}},"dimming":{"mode":"dimming","dimming":{"brightness":100.0}},"color":{"mode":"color_temperature","color_temperature":{"mirek":366}}},"type":"light"}]}`),
-			LightProps{"8535734d-7136-45e6-a551-70b5f2782fa8", "hue_color_1", true, 50.2, 0.5249, 0.4136}},
+			LightProps{"8535734d-7136-45e6-a551-70b5f2782fa8", "hue_color_1", true, 50.2, 0.5249, 0.4136, "#FFB243"}},
 		// white lamp
 		{[]byte(`{"errors":[],"data":[{"id":"c873dbb6-aae7-44b2-b0b9-e1ef3992cec7","id_v1":"/lights/1","owner":{"rid":"9195f3ad-48e7-44e5-8894-4c8855eae5c2","rtype":"device"},"metadata":{"name":"white_lamp_1","archetype":"single_spot","fixed_mired":366,"function":"functional"},"product_data":{"function":"functional"},"identify":{},"on":{"on":false},"dimming":{"brightness":100.0,"min_dim_level":5.0},"dimming_delta":{},"dynamics":{"status":"none","status_values":["none"],"speed":0.0,"speed_valid":false},"alert":{"action_values":["breathe"]},"signaling":{"signal_values":["no_signal","on_off"]},"mode":"normal","effects":{"status_values":["no_effect","candle"],"status":"no_effect","effect_values":["no_effect","candle"]},"powerup":{"preset":"safety","configured":true,"on":{"mode":"on","on":{"on":true}},"dimming":{"mode":"dimming","dimming":{"brightness":100.0}}},"type":"light"}]}`),
-			LightProps{"c873dbb6-aae7-44b2-b0b9-e1ef3992cec7", "white_lamp_1", false, 100.0, 0.0, 0.0}},
+			LightProps{"c873dbb6-aae7-44b2-b0b9-e1ef3992cec7", "white_lamp_1", false, 100.0, 0.0, 0.0, "#FFFFFF"}},
 	}
 
 	for _, test := range tests {
 		if got := ParseLightResource(test.input); got != test.want {
-			t.Errorf("ParseLightResource(%q) == %v", test.input, test.want)
+			t.Errorf("ParseLightResource(%q) \nwant: %v\ngot: %v", test.input, test.want, got)
 		}
 	}
 }

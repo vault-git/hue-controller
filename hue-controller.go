@@ -31,19 +31,7 @@ func setNewLightProps(currentProps LightProps, newProps *LightProps) {
 }
 
 func SetLight(config BridgeConfig, lightProps LightProps) {
-	lights := ParseDeviceResource(GetDeviceResource(config))
-
-	for _, rid := range lights {
-		light := ParseLightResource(GetLightResource(config, rid))
-
-		if light.Name == lightProps.Name {
-			currentLightProps := ParseLightResource(GetLightResource(config, rid))
-
-			setNewLightProps(currentLightProps, &lightProps)
-
-			PutLightResource(config, rid, lightProps)
-
-			return
-		}
-	}
+	currentLightProps := ParseLightResource(GetLightResource(config, lightProps.Id))
+	setNewLightProps(currentLightProps, &lightProps)
+	PutLightResource(config, lightProps)
 }

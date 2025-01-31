@@ -79,9 +79,9 @@ func PostNewClient(ip string) ([]byte, error) {
 	return respBody, nil
 }
 
-func PutLightResource(c BridgeConfig, rId string, lp LightProps) {
+func PutLightResource(c BridgeConfig, lp LightProps) {
 	lightProps := bytes.NewBuffer(CreateLightPropertiesRequest(lp))
-	req, err := http.NewRequest("PUT", fmt.Sprintf(lightResourceUrl, c.Ip, rId), lightProps)
+	req, err := http.NewRequest("PUT", fmt.Sprintf(lightResourceUrl, c.Ip, lp.Id), lightProps)
 	if err != nil {
 		log.Println(err)
 		return

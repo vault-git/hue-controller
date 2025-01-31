@@ -6,6 +6,7 @@ import (
 )
 
 type LightProps struct {
+	Id         string
 	Name       string
 	On         bool
 	Brightness float64
@@ -22,7 +23,7 @@ func (lp *LightProps) String() string {
 		return "Off"
 	}()
 
-	return fmt.Sprintf("State: %s, Brightness: %0.1f, ColorCoords: %0.4f, %0.4f\n", state, lp.Brightness, lp.ColorX, lp.ColorY)
+	return fmt.Sprintf("Id: %s, State: %s, Brightness: %0.1f, ColorCoords: %0.4f, %0.4f\n", lp.Id, state, lp.Brightness, lp.ColorX, lp.ColorY)
 }
 
 func ParseLightResource(buf []byte) LightProps {
@@ -48,6 +49,7 @@ func ParseLightResource(buf []byte) LightProps {
 	}
 
 	type Data struct {
+		Id       string
 		MetaData MetaData
 		Dimming  Dimming
 		On       On
@@ -70,6 +72,7 @@ func ParseLightResource(buf []byte) LightProps {
 	lightData := res.Data[0]
 
 	return LightProps{
+		lightData.Id,
 		lightData.MetaData.Name,
 		lightData.On.On,
 		lightData.Dimming.Brightness,

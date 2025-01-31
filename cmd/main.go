@@ -58,7 +58,7 @@ func createNewConfig(config *hc.BridgeConfig) {
 func main() {
 	listLights := flag.Bool("list", false, "Lists all registered lights.")
 	createConfig := flag.Bool("register", false, "Creates a config and registers a new HUE api key.")
-	lightName := flag.String("light", "", "Name of the light to control.")
+	lightId := flag.String("light", "", "ID of the light to control.")
 	brightness := flag.Float64("br", -1.0, "Controls the brightness of the given light. [0 - 100]")
 	colorX := flag.Float64("colorx", -1.0, "Controls the X Coordinate in the color diagram. [0.0 - 1.0]")
 	colorY := flag.Float64("colory", -1.0, "Controls the Y Coordinate in the color diagram. [0.0 - 1.0]")
@@ -84,13 +84,13 @@ func main() {
 		return
 	}
 
-	if len(*lightName) == 0 {
+	if len(*lightId) == 0 {
 		flag.Usage()
 		return
 	}
 
 	hc.SetLight(config, hc.LightProps{
-		Name:       *lightName,
+		Id:         *lightId,
 		Brightness: *brightness,
 		ColorX:     *colorX,
 		ColorY:     *colorY,

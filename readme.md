@@ -1,4 +1,4 @@
-# Project
+# HUE Controller
 GO cli tool that enables you to control Phillips smart lights through the HUE Bridge.
 
 On first use a config file needs to be created, this can be done using the "--register"
